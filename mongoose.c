@@ -3232,7 +3232,7 @@ static sock_t mg_open_listening_socket(union socket_address *sa, int type,
 #if !MG_LWIP /* LWIP doesn't support either */
 #if defined(_WIN32) && defined(SO_EXCLUSIVEADDRUSE) && !defined(WINCE)
       /* "Using SO_REUSEADDR and SO_EXCLUSIVEADDRUSE" http://goo.gl/RmrFTm */
-      !setsockopt(sock, SOL_SOCKET, SO_EXCLUSIVEADDRUSE, (void *) &on,
+      !setsockopt(sock, SOL_SOCKET, SO_EXCLUSIVEADDRUSE, (const char *) &on,
                   sizeof(on)) &&
 #endif
 
@@ -10636,9 +10636,9 @@ static int mg_get_ip_address_of_nameserver(char *name, size_t name_len) {
         break;
       }
       if (RegOpenKeyExW(hKey, subkey, 0, KEY_READ, &hSub) == ERROR_SUCCESS &&
-          (RegQueryValueExW(hSub, L"NameServer", 0, &type, (void *) value,
+          (RegQueryValueExW(hSub, L"NameServer", 0, &type, (LPBYTE) value,
                             &len) == ERROR_SUCCESS ||
-           RegQueryValueExW(hSub, L"DhcpNameServer", 0, &type, (void *) value,
+							RegQueryValueExW(hSub, L"DhcpNameServer", 0, &type, (LPBYTE)value,
                             &len) == ERROR_SUCCESS)) {
         /*
          * See https://github.com/cesanta/mongoose/issues/176
